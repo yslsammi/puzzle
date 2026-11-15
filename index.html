@@ -47,17 +47,17 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* 頂部進度與重聽欄 */
+    /* 頂部進度、返回與重聽欄 */
     #top-bar {
       position: fixed;
       top: 14px;
-      left: 84px;
-      right: 20px;
+      left: 82px;
+      right: 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       z-index: 20;
-      gap: 10px;
+      gap: 8px;
     }
 
     .top-badges-left {
@@ -67,13 +67,30 @@
       flex-wrap: wrap;
     }
 
+    #back-home-btn {
+      background: #FF453A;
+      color: #FFFFFF;
+      border: 3px solid #FFFFFF;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    #back-home-btn:active {
+      transform: scale(0.95);
+    }
+
     #student-badge {
       background: #002868;
       border: 3px solid #00D4FF;
       color: #FFFFFF;
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 20px;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 900;
       white-space: nowrap;
       cursor: pointer;
@@ -83,23 +100,23 @@
       background: var(--card-bg);
       border: 3px solid var(--card-border);
       color: var(--text-color);
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 20px;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 900;
       white-space: nowrap;
     }
 
     #progress-bar-container {
       display: flex;
-      gap: 7px;
+      gap: 6px;
       flex-wrap: wrap;
       justify-content: center;
     }
 
     .progress-dot {
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       border: 3px solid var(--card-border);
       background-color: transparent;
@@ -116,13 +133,13 @@
       color: #000000;
       border: 3px solid #000000;
       border-radius: 22px;
-      padding: 10px 20px;
-      font-size: 1.2rem;
+      padding: 9px 18px;
+      font-size: 1.15rem;
       font-weight: 900;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.35);
       white-space: nowrap;
     }
@@ -139,7 +156,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 76px 18px 86px 18px;
+      padding: 78px 18px 86px 18px;
       gap: 12px;
     }
 
@@ -152,15 +169,23 @@
       min-height: 1.3em;
     }
 
-    /* 左右分欄工作區：左邊拼圖底板，右邊拼圖塊托盤 */
+    /* 左右分欄工作區：左邊待拼圖塊托盤 ➔ 右邊拼圖底板 */
     #puzzle-workspace {
       display: flex;
       align-items: center;
       justify-content: space-evenly;
       width: 100%;
-      max-width: 1200px;
+      max-width: 1240px;
       flex: 1;
-      gap: clamp(20px, 4vw, 60px);
+      gap: clamp(12px, 3vw, 40px);
+    }
+
+    .direction-arrow {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 900;
+      color: #00FF00;
+      opacity: 0.85;
+      pointer-events: none;
     }
 
     .zone-wrapper {
@@ -181,7 +206,67 @@
       color: #002868;
     }
 
-    /* 拼圖底板 */
+    /* 左側待拼圖塊托盤 */
+    #pieces-tray {
+      background-color: rgba(35, 35, 42, 0.85);
+      border: 5px dashed #00D4FF;
+      border-radius: 26px;
+      padding: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      align-content: center;
+      gap: 18px;
+      transition: opacity 0.3s ease;
+    }
+
+    body.light-theme #pieces-tray {
+      background-color: rgba(225, 234, 245, 0.9);
+      border-color: #0055B3;
+    }
+
+    .tray-slot-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    /* 可拖拉／點選的拼圖塊 */
+    .puzzle-piece {
+      border: 5px solid #FFFF00;
+      border-radius: 16px;
+      background-repeat: no-repeat;
+      cursor: grab;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.2s ease;
+      position: relative;
+      z-index: 10;
+    }
+
+    body.light-theme .puzzle-piece {
+      border-color: #002868;
+    }
+
+    .puzzle-piece.selected-piece {
+      border-color: #00FF00 !important;
+      box-shadow: 0 0 32px rgba(0, 255, 0, 0.95);
+      transform: scale(1.06);
+    }
+
+    .puzzle-piece.dragging {
+      position: fixed !important;
+      z-index: 150 !important;
+      cursor: grabbing;
+      border-color: #00FF00 !important;
+      box-shadow: 0 18px 42px rgba(0, 255, 0, 0.75);
+      transform: scale(1.06);
+      pointer-events: none;
+    }
+
+    /* 右側拼圖底板 */
     #puzzle-board {
       position: relative;
       background-color: var(--card-bg);
@@ -256,66 +341,6 @@
     @keyframes snapPop {
       0% { transform: scale(1.12); }
       100% { transform: scale(1); }
-    }
-
-    /* 右側待拼圖塊托盤 */
-    #pieces-tray {
-      background-color: rgba(35, 35, 42, 0.85);
-      border: 5px dashed #00D4FF;
-      border-radius: 26px;
-      padding: 18px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      align-content: center;
-      gap: 18px;
-      transition: opacity 0.3s ease;
-    }
-
-    body.light-theme #pieces-tray {
-      background-color: rgba(225, 234, 245, 0.9);
-      border-color: #0055B3;
-    }
-
-    .tray-slot-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 16px;
-      background: rgba(0, 0, 0, 0.25);
-    }
-
-    /* 可拖拉／點選的拼圖塊 */
-    .puzzle-piece {
-      border: 5px solid #FFFF00;
-      border-radius: 16px;
-      background-repeat: no-repeat;
-      cursor: grab;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
-      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.2s ease;
-      position: relative;
-      z-index: 10;
-    }
-
-    body.light-theme .puzzle-piece {
-      border-color: #002868;
-    }
-
-    .puzzle-piece.selected-piece {
-      border-color: #00FF00 !important;
-      box-shadow: 0 0 32px rgba(0, 255, 0, 0.95);
-      transform: scale(1.06);
-    }
-
-    .puzzle-piece.dragging {
-      position: fixed !important;
-      z-index: 150 !important;
-      cursor: grabbing;
-      border-color: #00FF00 !important;
-      box-shadow: 0 18px 42px rgba(0, 255, 0, 0.75);
-      transform: scale(1.06);
-      pointer-events: none;
     }
 
     /* 底部手動「下一題」按鈕列 */
@@ -402,13 +427,13 @@
       margin: 4px 0 18px 0;
     }
 
-    /* 開始畫面圖卡預覽列 */
+    /* 開始畫面已選圖卡預覽列 */
     .builtin-preview-strip {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 10px;
-      max-width: 820px;
+      max-width: 840px;
       margin-bottom: 24px;
     }
 
@@ -518,7 +543,7 @@
       background-color: var(--panel-bg);
       color: #FFFFFF;
       width: 100%;
-      max-width: 920px;
+      max-width: 940px;
       max-height: 92vh;
       overflow-y: auto;
       border-radius: 20px;
@@ -558,7 +583,7 @@
     }
 
     .stat-value {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 800;
       color: #00FF00;
     }
@@ -604,12 +629,38 @@
       border-color: #FFFF00;
     }
 
+    /* 指定圖片勾選區 */
     .custom-upload-box {
       background: #232328;
       border: 2px dashed #00D4FF;
       border-radius: 16px;
       padding: 16px;
       margin-top: 10px;
+    }
+
+    .quick-select-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #3C3C44;
+      align-items: center;
+    }
+
+    .quick-filter-btn {
+      background: #2E3440;
+      color: #FFFFFF;
+      border: 2px solid #55627A;
+      border-radius: 10px;
+      padding: 7px 13px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .quick-filter-btn:active {
+      transform: scale(0.96);
     }
 
     .upload-controls {
@@ -622,10 +673,10 @@
     .file-pick-btn {
       background: #00D4FF;
       color: #000000;
-      padding: 11px 18px;
+      padding: 10px 16px;
       border-radius: 12px;
       font-weight: 900;
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -635,10 +686,10 @@
     .camera-pick-btn {
       background: #FFB800;
       color: #000000;
-      padding: 11px 18px;
+      padding: 10px 16px;
       border-radius: 12px;
       font-weight: 900;
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -697,33 +748,62 @@
 
     .items-manage-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
-      gap: 10px;
-      margin-top: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
     }
 
     .manage-card {
-      background: #2B2B32;
-      border: 1px solid #4A4A52;
-      border-radius: 12px;
-      padding: 8px 6px;
+      background: #222228;
+      border: 3px solid #44444C;
+      border-radius: 14px;
+      padding: 10px 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
       text-align: center;
+      cursor: pointer;
+      opacity: 0.48;
+      transition: opacity 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
     }
 
-    .manage-card.hc-card {
-      border-color: #FFFF00;
+    .manage-card.is-selected {
+      opacity: 1;
+      border-color: #00FF00;
+      background: #1C2B1E;
+      box-shadow: 0 0 14px rgba(0, 255, 0, 0.3);
+    }
+
+    .select-check-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: #333;
+      border: 2px solid #888;
+      color: #000;
+      font-weight: 900;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .manage-card.is-selected .select-check-badge {
+      background: #00FF00;
+      border-color: #00FF00;
     }
 
     .manage-card .thumb-box {
-      width: 72px;
-      height: 72px;
+      width: 74px;
+      height: 74px;
       border-radius: 10px;
       overflow: hidden;
       margin-bottom: 6px;
+      margin-top: 6px;
     }
 
     .manage-card .thumb-box img {
@@ -733,14 +813,14 @@
     }
 
     .manage-card .card-title {
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: #FFFFFF;
     }
 
     .manage-card .card-tag {
-      font-size: 0.72rem;
-      color: #AAAAAA;
+      font-size: 0.74rem;
+      color: #BBBBBB;
       margin-top: 2px;
     }
 
@@ -748,8 +828,8 @@
       position: absolute;
       top: -6px;
       right: -6px;
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       background: #FF3B30;
       color: #FFFFFF;
@@ -760,6 +840,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 5;
     }
 
     .panel-footer {
@@ -795,37 +876,40 @@
 <body>
 
   <!-- 教師設定按鈕（左上角單按 1 下即開啟） -->
-  <div id="teacher-trigger" title="開啟教師設定與難度選項">
+  <div id="teacher-trigger" title="開啟教師設定與指定圖片選擇">
     <svg class="gear-icon" viewBox="0 0 24 24">
       <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
     </svg>
   </div>
 
-  <!-- 頂部狀態欄 -->
+  <!-- 頂部狀態欄（含「↩️ 返回」按鈕） -->
   <div id="top-bar">
     <div class="top-badges-left">
-      <div id="student-badge" title="點擊開啟設定">🎨 全部日常圖卡</div>
-      <div id="level-badge">階段 1：左右 2 塊</div>
+      <button id="back-home-btn" title="中途返回主畫面">↩️ 返回</button>
+      <div id="student-badge" title="點擊開啟設定">🖼️ 已選 10 張圖卡</div>
+      <div id="level-badge">階段 0：拉 1 塊</div>
     </div>
     <div id="progress-bar-container"></div>
     <button id="replay-audio-btn">🔊 再聽一次</button>
   </div>
 
-  <!-- 主遊戲區 -->
+  <!-- 主遊戲區（由左邊待拼圖塊托盤 ➔ 右邊拼圖底板） -->
   <div id="main-container">
     <div id="prompt-banner">準備開始拼圖</div>
     <div id="puzzle-workspace">
+      <div class="zone-wrapper" id="tray-wrapper">
+        <div class="zone-title">1. 左邊圖塊（拖拉去右邊）</div>
+        <div id="pieces-tray"></div>
+      </div>
+
+      <div class="direction-arrow">➡️</div>
+
       <div class="zone-wrapper">
-        <div class="zone-title">拼圖底板（拖拉或點選放入）</div>
+        <div class="zone-title">2. 右邊拼圖底板</div>
         <div id="puzzle-board">
           <img id="board-ghost-img" src="" alt="" />
           <div id="board-slots-grid"></div>
         </div>
-      </div>
-
-      <div class="zone-wrapper" id="tray-wrapper">
-        <div class="zone-title">待拼圖塊</div>
-        <div id="pieces-tray"></div>
       </div>
     </div>
   </div>
@@ -835,16 +919,16 @@
     <button id="next-question-btn">➡️ 下一題</button>
   </div>
 
-  <!-- 啟動畫面：直接一按即玩，無需預先上傳 -->
+  <!-- 啟動畫面 -->
   <div id="start-overlay">
     <h1 style="font-size: 2.5rem; color: #FFFF00; margin: 4px 0;">🧩 拼圖小達人</h1>
-    <div class="start-subtitle">已內置 10 張學生日常生活用品清晰圖卡（高對比 ＋ 自然色）</div>
+    <div class="start-subtitle" id="start-pool-subtitle">目前練習圖卡（共 10 張，可在設定剔選指定圖片）</div>
 
     <div class="builtin-preview-strip" id="start-preview-strip"></div>
 
     <div class="start-actions-row">
       <button class="big-start-btn" id="start-btn">▶️ 立即開始拼圖</button>
-      <button class="secondary-setup-btn" id="start-upload-btn">⚙️ 調整難度與圖卡設定</button>
+      <button class="secondary-setup-btn" id="start-upload-btn">⚙️ 剔選指定圖片與難度設定</button>
     </div>
   </div>
 
@@ -853,15 +937,18 @@
     <div class="trophy-icon">🏆</div>
     <div class="break-title">好叻喎！拼得超靚！</div>
     <div class="break-stats" id="break-stats-text"></div>
-    <button class="big-start-btn" id="continue-btn">繼續下一回合</button>
+    <div class="start-actions-row">
+      <button class="big-start-btn" id="continue-btn">繼續下一回合</button>
+      <button class="secondary-setup-btn" id="break-home-btn">↩️ 返回主畫面</button>
+    </div>
   </div>
 
   <!-- 教師設定面板 -->
   <div id="teacher-panel">
     <div class="panel-card">
       <div class="panel-header">
-        <h2>👩‍🏫 拼圖小達人 － 教師設定與圖卡庫</h2>
-        <span style="font-size: 0.9rem; color: #AAA;">已內置 10 張日常用品圖卡</span>
+        <h2>👩‍🏫 拼圖小達人 － 教師設定與指定圖片選擇</h2>
+        <span style="font-size: 0.9rem; color: #AAA;">支援由左拉去右、單塊起步</span>
       </div>
 
       <div class="stats-grid">
@@ -870,30 +957,21 @@
           <div class="stat-label">累計完成拼圖數</div>
         </div>
         <div class="stat-box">
-          <div class="stat-value" id="stat-stage">左右 2 塊</div>
+          <div class="stat-value" id="stat-stage">拉 1 塊</div>
           <div class="stat-label">目前切圖階段</div>
         </div>
         <div class="stat-box">
           <div class="stat-value" id="stat-photos">10</div>
-          <div class="stat-label">可用圖卡總數</div>
+          <div class="stat-label">已剔選練習圖片</div>
         </div>
       </div>
 
-      <!-- 1. 圖卡對比度組合選擇 -->
+      <!-- 1. 切圖塊數與階段（由最簡單「拉 1 塊」開始） -->
       <div class="setting-group">
-        <label>1. 選擇圖卡對比度類型（黃框為高對比圖卡，藍灰底為自然日常圖卡）</label>
-        <div class="btn-group" data-setting="poolFilter">
-          <button class="opt-btn active" data-val="all">全部圖卡混合（高對比 ＋ 自然色）</button>
-          <button class="opt-btn" data-val="high">只用「高對比清晰圖卡」（黑底鮮色，5 張）</button>
-          <button class="opt-btn" data-val="natural">只用「自然柔和日常圖卡」（貼近實物，5 張）</button>
-        </div>
-      </div>
-
-      <!-- 2. 切圖塊數與階段 -->
-      <div class="setting-group">
-        <label>2. 拼圖切割難度（訓練視覺完形與空間結構）</label>
+        <label>1. 拼圖切割難度（由左邊拉去右邊，最簡單先拉 1 塊）</label>
         <div class="btn-group" data-setting="cutMode">
-          <button class="opt-btn active" data-val="auto">自動進階（左右 2 塊 → 上下 2 塊 → 2×2 四塊）</button>
+          <button class="opt-btn active" data-val="auto">自動進階（拉 1 塊 → 左右 2 塊 → 上下 2 塊 → 2×2 四塊）</button>
+          <button class="opt-btn" data-val="single1">固定：拉 1 塊（最簡單，整張圖由左拉去右）</button>
           <button class="opt-btn" data-val="lr2">固定：左右 2 塊（垂直切開）</button>
           <button class="opt-btn" data-val="tb2">固定：上下 2 塊（水平切開）</button>
           <button class="opt-btn" data-val="grid4">固定：2×2 四塊拼圖</button>
@@ -901,9 +979,37 @@
         </div>
       </div>
 
+      <!-- 2. 點選指定圖片做練習（支援單張或多張剔選，亦可上傳相片） -->
+      <div class="setting-group">
+        <label>2. 點選指定圖片做練習（直接點擊圖卡即可剔選／取消剔選，綠框代表會出題）</label>
+        <div class="custom-upload-box">
+          <div class="quick-select-bar">
+            <span style="font-size: 0.9rem; color: #00D4FF; font-weight: 800;">快捷篩選：</span>
+            <button type="button" class="quick-filter-btn" id="sel-all-btn">✅ 全選全部</button>
+            <button type="button" class="quick-filter-btn" id="sel-high-btn">⚡ 只選高對比（5張）</button>
+            <button type="button" class="quick-filter-btn" id="sel-natural-btn">🌿 只選自然日常（5張）</button>
+            <button type="button" class="quick-filter-btn" id="sel-custom-btn">📷 只選自訂相片</button>
+            <button type="button" class="quick-filter-btn" id="sel-clear-btn">⬜ 全部取消（方便逐張揀）</button>
+          </div>
+
+          <div class="upload-controls">
+            <label for="batch-photo-file" class="file-pick-btn">🖼️ 從相簿加入自訂相片</label>
+            <input type="file" id="batch-photo-file" accept="image/*" multiple style="display:none;" />
+
+            <label for="camera-photo-file" class="camera-pick-btn">📸 用相機即場影相加入</label>
+            <input type="file" id="camera-photo-file" accept="image/*" capture="environment" style="display:none;" />
+          </div>
+
+          <div id="pending-batch-list"></div>
+          <button type="button" id="save-batch-btn">✅ 確認加入以上相片並勾選</button>
+
+          <div class="items-manage-grid" id="all-items-grid"></div>
+        </div>
+      </div>
+
       <!-- 3. 底板視覺提示強度 -->
       <div class="setting-group">
-        <label>3. 拼圖底板視覺完形鷹架（底圖透明度）</label>
+        <label>3. 右邊拼圖底板視覺完形鷹架（底圖透明度）</label>
         <div class="btn-group" data-setting="ghostOpacity">
           <button class="opt-btn active" data-val="0.28">初學提示：淡色原圖底稿 ＋ 格線</button>
           <button class="opt-btn" data-val="0.10">進階完形：極淡輪廓底稿 ＋ 格線</button>
@@ -940,28 +1046,9 @@
         </div>
       </div>
 
-      <!-- 7. 圖卡庫預覽與選配額外相片上傳 -->
-      <div class="setting-group">
-        <label>7. 內置日常用品圖卡庫（可隨時額外加入學生自己的相片）</label>
-        <div class="custom-upload-box">
-          <div class="upload-controls">
-            <label for="batch-photo-file" class="file-pick-btn">🖼️ 額外從相簿加入相片</label>
-            <input type="file" id="batch-photo-file" accept="image/*" multiple style="display:none;" />
-
-            <label for="camera-photo-file" class="camera-pick-btn">📸 用相機即場影相加入</label>
-            <input type="file" id="camera-photo-file" accept="image/*" capture="environment" style="display:none;" />
-          </div>
-
-          <div id="pending-batch-list"></div>
-          <button type="button" id="save-batch-btn">✅ 確認加入以上相片</button>
-
-          <div class="items-manage-grid" id="all-items-grid"></div>
-        </div>
-      </div>
-
       <div class="panel-footer">
         <button class="action-btn btn-reset" id="reset-stats-btn">重設進度統計</button>
-        <button class="action-btn btn-close" id="close-panel-btn">儲存並繼續拼圖</button>
+        <button class="action-btn btn-close" id="close-panel-btn">儲存並開始拼圖</button>
       </div>
     </div>
   </div>
@@ -973,7 +1060,7 @@
     }
 
     const BUILTIN_PUZZLE_ITEMS = [
-      // --- 第一組：高對比清晰圖卡（純黑底＋鮮明高飽和色塊）---
+      // 高對比清晰圖卡
       {
         id: 'bi_cup',
         name: '水杯',
@@ -981,11 +1068,8 @@
         imageUrl: svgToDataUrl(`
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
             <rect width="400" height="400" fill="#000000"/>
-            <!-- 杯耳 -->
             <path d="M 265 145 H 310 C 335 145 348 165 348 205 C 348 245 335 265 310 265 H 265" fill="none" stroke="#FFFF00" stroke-width="28" stroke-linecap="round"/>
-            <!-- 杯身 -->
             <path d="M 105 110 H 275 L 258 315 C 256 334 242 346 223 346 H 157 C 138 346 124 334 122 315 Z" fill="#FFFF00"/>
-            <!-- 杯口高對比深色橢圓與飲管 -->
             <ellipse cx="190" cy="112" rx="85" ry="18" fill="#1A1A00" stroke="#FFFFFF" stroke-width="6"/>
             <rect x="208" y="42" width="18" height="75" rx="6" transform="rotate(14 217 80)" fill="#00E5FF"/>
           </svg>
@@ -998,15 +1082,10 @@
         imageUrl: svgToDataUrl(`
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
             <rect width="400" height="400" fill="#000000"/>
-            <!-- 頂部手挽 -->
             <path d="M 155 95 V 68 C 155 52 170 42 200 42 C 230 42 245 52 245 68 V 95" fill="none" stroke="#FFFF00" stroke-width="20" stroke-linecap="round"/>
-            <!-- 書包主體 -->
             <rect x="92" y="92" width="216" height="252" rx="54" fill="#FF2A2A" stroke="#FFFFFF" stroke-width="8"/>
-            <!-- 上蓋弧線 -->
             <path d="M 96 175 Q 200 225 304 175" fill="none" stroke="#FFFF00" stroke-width="12"/>
-            <!-- 前袋 -->
             <rect x="128" y="220" width="144" height="96" rx="24" fill="#FFFF00"/>
-            <!-- 扣帶 -->
             <rect x="184" y="168" width="32" height="48" rx="8" fill="#FFFFFF"/>
           </svg>
         `)
@@ -1019,9 +1098,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
             <rect width="400" height="400" fill="#000000"/>
             <g transform="rotate(-35 200 200)">
-              <!-- 手柄 -->
               <rect x="182" y="175" width="36" height="190" rx="18" fill="#00E5FF" stroke="#FFFFFF" stroke-width="6"/>
-              <!-- 匙頭 -->
               <ellipse cx="200" cy="115" rx="64" ry="84" fill="#00E5FF" stroke="#FFFFFF" stroke-width="8"/>
               <ellipse cx="200" cy="115" rx="40" ry="56" fill="#005B7F"/>
             </g>
@@ -1035,15 +1112,11 @@
         imageUrl: svgToDataUrl(`
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
             <rect width="400" height="400" fill="#000000"/>
-            <!-- 車身 -->
             <rect x="44" y="105" width="312" height="175" rx="32" fill="#FFFF00" stroke="#FFFFFF" stroke-width="6"/>
-            <!-- 車窗 -->
             <rect x="68" y="130" width="76" height="68" rx="12" fill="#0A192F"/>
             <rect x="160" y="130" width="76" height="68" rx="12" fill="#0A192F"/>
             <rect x="252" y="130" width="80" height="68" rx="12" fill="#0A192F"/>
-            <!-- 車身紅間 -->
             <rect x="48" y="218" width="304" height="22" fill="#FF2A2A"/>
-            <!-- 車輪 -->
             <circle cx="118" cy="285" r="38" fill="#FFFFFF"/>
             <circle cx="118" cy="285" r="22" fill="#111111"/>
             <circle cx="282" cy="285" r="38" fill="#FFFFFF"/>
@@ -1058,19 +1131,14 @@
         imageUrl: svgToDataUrl(`
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
             <rect width="400" height="400" fill="#000000"/>
-            <!-- 果蒂 -->
             <path d="M 200 120 Q 198 78 220 55" fill="none" stroke="#FFB800" stroke-width="16" stroke-linecap="round"/>
-            <!-- 綠葉 -->
             <path d="M 204 95 C 235 60 285 68 292 98 C 265 118 225 115 204 95 Z" fill="#00FF00"/>
-            <!-- 蘋果主體 -->
             <path d="M 200 132 C 155 105 84 128 84 215 C 84 298 145 352 184 352 C 194 352 197 344 200 344 C 203 344 206 352 216 352 C 255 352 316 298 316 215 C 316 128 245 105 200 132 Z" fill="#FF2A2A" stroke="#FFFFFF" stroke-width="6"/>
-            <!-- 高光 -->
             <path d="M 122 175 Q 112 215 126 252" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/>
           </svg>
         `)
       },
-
-      // --- 第二組：自然柔和日常圖卡（貼近日常實物配色，對比度適中）---
+      // 自然柔和日常圖卡
       {
         id: 'bi_toothbrush',
         name: '牙刷',
@@ -1079,13 +1147,10 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
             <rect width="400" height="400" fill="#E3EDF5"/>
             <g transform="rotate(-35 200 200)">
-              <!-- 刷毛 -->
               <rect x="142" y="72" width="50" height="72" rx="10" fill="#FFFFFF" stroke="#B0C4D8" stroke-width="4"/>
               <line x1="142" y1="96" x2="192" y2="96" stroke="#B0C4D8" stroke-width="3"/>
               <line x1="142" y1="120" x2="192" y2="120" stroke="#B0C4D8" stroke-width="3"/>
-              <!-- 牙膏 -->
               <path d="M 135 82 Q 115 108 138 134" fill="none" stroke="#4DB6AC" stroke-width="16" stroke-linecap="round"/>
-              <!-- 牙刷柄 -->
               <rect x="188" y="65" width="28" height="285" rx="14" fill="#4A90E2"/>
               <rect x="195" y="185" width="14" height="110" rx="7" fill="#A3CCF5"/>
             </g>
@@ -1099,13 +1164,9 @@
         imageUrl: svgToDataUrl(`
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
             <rect width="400" height="400" fill="#F2EFE9"/>
-            <!-- 鞋身 -->
             <path d="M 65 258 L 82 162 L 145 155 L 195 198 L 315 215 C 338 220 348 238 345 258 Z" fill="#D9534F"/>
-            <!-- 白色鞋底 -->
             <rect x="58" y="255" width="292" height="32" rx="14" fill="#FFFFFF" stroke="#CCCCCC" stroke-width="4"/>
-            <!-- 鞋頭 -->
             <path d="M 288 212 C 325 215 346 232 346 255 H 288 Z" fill="#F7F7F7"/>
-            <!-- 鞋帶 -->
             <line x1="168" y1="172" x2="192" y2="160" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/>
             <line x1="194" y1="190" x2="218" y2="178" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/>
             <line x1="220" y1="206" x2="244" y2="194" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/>
@@ -1119,11 +1180,8 @@
         imageUrl: svgToDataUrl(`
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
             <rect width="400" height="400" fill="#EAE6DF"/>
-            <!-- 摺疊毛巾下層 -->
             <rect x="78" y="185" width="244" height="105" rx="22" fill="#E6B84C" stroke="#C99B32" stroke-width="4"/>
-            <!-- 摺疊毛巾上層 -->
             <rect x="88" y="115" width="224" height="92" rx="22" fill="#F5CE6C" stroke="#D4A63B" stroke-width="4"/>
-            <!-- 織紋條紋 -->
             <rect x="88" y="168" width="224" height="14" fill="#FFFFFF" opacity="0.75"/>
             <rect x="78" y="246" width="244" height="14" fill="#FFFFFF" opacity="0.65"/>
           </svg>
@@ -1136,13 +1194,9 @@
         imageUrl: svgToDataUrl(`
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
             <rect width="400" height="400" fill="#E8EEF2"/>
-            <!-- 碗底腳 -->
             <rect x="148" y="275" width="104" height="24" rx="8" fill="#D5DEE6"/>
-            <!-- 碗身 -->
             <path d="M 72 155 H 328 C 324 238 272 282 200 282 C 128 282 76 238 72 155 Z" fill="#FFFFFF" stroke="#B8C7D4" stroke-width="5"/>
-            <!-- 青花邊紋 -->
             <path d="M 76 178 H 324" stroke="#5C8AB8" stroke-width="10"/>
-            <!-- 碗口橢圓 -->
             <ellipse cx="200" cy="155" rx="128" ry="22" fill="#F4F7FA" stroke="#B8C7D4" stroke-width="5"/>
           </svg>
         `)
@@ -1154,13 +1208,9 @@
         imageUrl: svgToDataUrl(`
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
             <rect width="400" height="400" fill="#E4E9EE"/>
-            <!-- 傘頂尖 -->
             <line x1="200" y1="62" x2="200" y2="95" stroke="#6B7A89" stroke-width="10" stroke-linecap="round"/>
-            <!-- 傘柄與彎勾 -->
             <path d="M 200 195 V 302 C 200 326 168 326 168 302" fill="none" stroke="#8C6239" stroke-width="14" stroke-linecap="round"/>
-            <!-- 傘面 -->
             <path d="M 68 202 C 74 125 132 88 200 88 C 268 88 326 125 332 202 Q 288 184 244 202 Q 200 184 156 202 Q 112 184 68 202 Z" fill="#4E89AE"/>
-            <!-- 傘面中幅配色 -->
             <path d="M 156 202 C 162 125 180 88 200 88 C 220 88 238 125 244 202 Q 200 184 156 202 Z" fill="#ED6663"/>
           </svg>
         `)
@@ -1168,14 +1218,14 @@
     ];
 
     // === 狀態儲存 ===
-    const STORAGE_KEY = 'puzzle_builtin_state_v1';
+    const STORAGE_KEY = 'puzzle_builtin_state_v2';
 
     let state = {
       customItems: [],
+      selectedIds: BUILTIN_PUZZLE_ITEMS.map(i => i.id),
       settings: {
-        poolFilter: 'all', // all | high | natural
         cutMode: 'auto',
-        currentCut: 'lr2',
+        currentCut: 'single1', // single1 | lr2 | tb2 | grid4 | grid9
         streakAtLevel: 0,
         ghostOpacity: '0.28',
         manualNext: false,
@@ -1189,16 +1239,29 @@
 
     let pendingBatchItems = [];
 
+    function getAllAvailableItems() {
+      const customTagged = state.customItems.map(item => ({ ...item, contrast: 'custom' }));
+      return [...BUILTIN_PUZZLE_ITEMS, ...customTagged];
+    }
+
     function loadState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
           if (parsed.customItems) state.customItems = parsed.customItems;
+          if (Array.isArray(parsed.selectedIds)) state.selectedIds = parsed.selectedIds;
           if (parsed.settings) state.settings = { ...state.settings, ...parsed.settings };
           if (parsed.stats) state.stats = { ...state.stats, ...parsed.stats };
         }
       } catch (e) {}
+
+      // 確保至少有 1 張圖卡被勾選
+      const allIds = getAllAvailableItems().map(i => i.id);
+      state.selectedIds = state.selectedIds.filter(id => allIds.includes(id));
+      if (state.selectedIds.length === 0) {
+        state.selectedIds = [...allIds];
+      }
     }
 
     function saveState() {
@@ -1210,14 +1273,9 @@
     }
 
     function getActiveItemPool() {
-      const customTagged = state.customItems.map(item => ({ ...item, contrast: 'custom' }));
-      if (state.settings.poolFilter === 'high') {
-        return [...BUILTIN_PUZZLE_ITEMS.filter(i => i.contrast === 'high'), ...customTagged];
-      }
-      if (state.settings.poolFilter === 'natural') {
-        return [...BUILTIN_PUZZLE_ITEMS.filter(i => i.contrast === 'natural'), ...customTagged];
-      }
-      return [...BUILTIN_PUZZLE_ITEMS, ...customTagged];
+      const all = getAllAvailableItems();
+      const filtered = all.filter(item => state.selectedIds.includes(item.id));
+      return filtered.length > 0 ? filtered : all;
     }
 
     const runtime = {
@@ -1225,9 +1283,9 @@
       targetItem: null,
       lastTargetId: '',
       rows: 1,
-      cols: 2,
+      cols: 1,
       snappedCount: 0,
-      totalPieces: 2,
+      totalPieces: 1,
       selectedPieceId: null,
       isCompleted: false,
       isPaused: true,
@@ -1370,17 +1428,32 @@
       });
     }
 
+    // === 中途「↩️ 返回」主畫面功能（不影響進度統計）===
+    function returnToMainMenu() {
+      runtime.isPaused = true;
+      runtime.isCompleted = false;
+      runtime.selectedPieceId = null;
+      clearAutoTimer();
+      clearSpeechQueue();
+      nextQuestionBar.style.display = 'none';
+      document.getElementById('break-overlay').style.display = 'none';
+      document.getElementById('teacher-panel').style.display = 'none';
+      renderStartPreview();
+      document.getElementById('start-overlay').style.display = 'flex';
+    }
+
+    document.getElementById('back-home-btn').addEventListener('click', returnToMainMenu);
+    document.getElementById('break-home-btn').addEventListener('click', returnToMainMenu);
+
     // === 介面與預覽渲染 ===
     function applySettingsUI() {
       const s = state.settings;
       document.body.classList.toggle('light-theme', s.theme === 'light');
 
-      const poolNames = {
-        all: '🎨 全部日常圖卡',
-        high: '⚡ 高對比圖卡',
-        natural: '🌿 自然日常圖卡'
-      };
-      studentBadge.textContent = poolNames[s.poolFilter] || '🎨 全部日常圖卡';
+      const activePool = getActiveItemPool();
+      studentBadge.textContent = activePool.length === 1
+        ? `🖼️ 指定：${activePool[0].name}`
+        : `🖼️ 已選 ${activePool.length} 張圖卡`;
 
       document.querySelectorAll('.btn-group').forEach(group => {
         const key = group.dataset.setting;
@@ -1394,12 +1467,18 @@
     function updateHeaderUI() {
       const s = state.settings;
       const cutNames = {
+        single1: '階段 0：拉 1 塊',
         lr2: '階段 1：左右 2 塊',
         tb2: '階段 2：上下 2 塊',
         grid4: '階段 3：2×2 四塊',
         grid9: '階段 4：3×3 九塊'
       };
-      levelBadge.textContent = cutNames[s.currentCut] || '階段 1：左右 2 塊';
+      levelBadge.textContent = cutNames[s.currentCut] || '階段 0：拉 1 塊';
+
+      const activePool = getActiveItemPool();
+      studentBadge.textContent = activePool.length === 1
+        ? `🖼️ 指定：${activePool[0].name}`
+        : `🖼️ 已選 ${activePool.length} 張圖卡`;
 
       progressBarContainer.innerHTML = '';
       if (s.roundLimit <= 0) {
@@ -1416,8 +1495,14 @@
 
     function renderStartPreview() {
       const strip = document.getElementById('start-preview-strip');
+      const subtitle = document.getElementById('start-pool-subtitle');
       strip.innerHTML = '';
       const pool = getActiveItemPool();
+
+      subtitle.textContent = pool.length === 1
+        ? `目前指定練習圖片：【${pool[0].name}】（可在設定更改）`
+        : `目前練習圖片（已選 ${pool.length} 張，可在設定剔選指定圖片）`;
+
       pool.forEach(item => {
         const chip = document.createElement('div');
         chip.className = 'preview-chip' + (item.contrast === 'high' ? ' high-contrast-chip' : '');
@@ -1429,7 +1514,7 @@
       });
     }
 
-    // === 產生拼圖題目 ===
+    // === 產生拼圖題目（由左邊拉去右邊）===
     function generatePuzzle() {
       if (runtime.isPaused) return;
       clearAutoTimer();
@@ -1443,11 +1528,12 @@
       }
 
       const cutConfig = {
+        single1: { rows: 1, cols: 1 },
         lr2: { rows: 1, cols: 2 },
         tb2: { rows: 2, cols: 1 },
         grid4: { rows: 2, cols: 2 },
         grid9: { rows: 3, cols: 3 }
-      }[s.currentCut] || { rows: 1, cols: 2 };
+      }[s.currentCut] || { rows: 1, cols: 1 };
 
       runtime.rows = cutConfig.rows;
       runtime.cols = cutConfig.cols;
@@ -1466,10 +1552,15 @@
       runtime.targetItem = target;
       runtime.lastTargetId = target.id;
 
-      promptBanner.textContent = `拼返好個「${target.name}」呀！`;
-      speakCantonese(`拼返好個${target.name}呀！`, 1.12);
+      if (runtime.totalPieces === 1) {
+        promptBanner.textContent = `將「${target.name}」由左邊拉去右邊！`;
+        speakCantonese(`將${target.name}拉去右邊呀！`, 1.12);
+      } else {
+        promptBanner.textContent = `拼返好個「${target.name}」呀！`;
+        speakCantonese(`拼返好個${target.name}呀！`, 1.12);
+      }
 
-      const boardSize = Math.round(Math.min(window.innerWidth * 0.42, window.innerHeight * 0.62, 460));
+      const boardSize = Math.round(Math.min(window.innerWidth * 0.40, window.innerHeight * 0.60, 450));
       puzzleBoard.classList.remove('board-completed');
       puzzleBoard.style.width = `${boardSize}px`;
       puzzleBoard.style.height = `${boardSize}px`;
@@ -1516,7 +1607,7 @@
         shuffled = shuffled.reverse();
       }
 
-      const trayScale = runtime.totalPieces === 9 ? 0.78 : 0.86;
+      const trayScale = runtime.totalPieces === 1 ? 0.88 : (runtime.totalPieces === 9 ? 0.78 : 0.86);
       const trayPieceW = Math.floor(pieceWidth * trayScale);
       const trayPieceH = Math.floor(pieceHeight * trayScale);
 
@@ -1592,7 +1683,7 @@
             const slotCx = slotRect.left + slotRect.width / 2;
             const slotCy = slotRect.top + slotRect.height / 2;
             const dist = Math.hypot(e.clientX - slotCx, e.clientY - slotCy);
-            const snapRadius = Math.max(pieceWidth, pieceHeight) * 0.65;
+            const snapRadius = Math.max(pieceWidth, pieceHeight) * 0.68;
             targetSlot.classList.toggle('slot-hover', dist <= snapRadius);
           }
         }
@@ -1611,7 +1702,7 @@
           const slotCx = slotRect.left + slotRect.width / 2;
           const slotCy = slotRect.top + slotRect.height / 2;
           const dist = Math.hypot(e.clientX - slotCx, e.clientY - slotCy);
-          const snapRadius = Math.max(pieceWidth, pieceHeight) * 0.68;
+          const snapRadius = Math.max(pieceWidth, pieceHeight) * 0.72;
 
           if (dist <= snapRadius) {
             snapPieceToSlot(piece, targetSlot, pieceIdx, boardSize, pieceWidth, pieceHeight);
@@ -1675,8 +1766,12 @@
       runtime.roundCompleted += 1;
       s.streakAtLevel += 1;
 
+      // 自動進階順序：拉 1 塊 ➔ 左右 2 塊 ➔ 上下 2 塊 ➔ 2×2 四塊
       if (s.cutMode === 'auto' && s.streakAtLevel >= 3) {
-        if (s.currentCut === 'lr2') {
+        if (s.currentCut === 'single1') {
+          s.currentCut = 'lr2';
+          s.streakAtLevel = 0;
+        } else if (s.currentCut === 'lr2') {
           s.currentCut = 'tb2';
           s.streakAtLevel = 0;
         } else if (s.currentCut === 'tb2') {
@@ -1760,6 +1855,8 @@
       if (runtime.targetItem && !runtime.isPaused) {
         if (runtime.isCompleted) {
           speakCantonese(runtime.targetItem.name, 1.15);
+        } else if (runtime.totalPieces === 1) {
+          speakCantonese(`將${runtime.targetItem.name}拉去右邊呀！`, 1.12);
         } else {
           speakCantonese(`拼返好個${runtime.targetItem.name}呀！`, 1.12);
         }
@@ -1774,7 +1871,13 @@
       playCompleteSound();
       speakCantonese('好叻喎！完成一回合拼圖啦，休息一陣先！', 1.18);
 
-      const cutNames = { lr2: '左右 2 塊', tb2: '上下 2 塊', grid4: '2×2 四塊', grid9: '3×3 九塊' };
+      const cutNames = {
+        single1: '拉 1 塊',
+        lr2: '左右 2 塊',
+        tb2: '上下 2 塊',
+        grid4: '2×2 四塊',
+        grid9: '3×3 九塊'
+      };
       document.getElementById('break-stats-text').innerHTML = `
         本回合完成：<strong>${runtime.roundCompleted}</strong> 張拼圖<br/>
         目前切圖階段：<strong>${cutNames[state.settings.currentCut]}</strong>
@@ -1788,6 +1891,45 @@
       document.getElementById('break-overlay').style.display = 'none';
       runtime.isPaused = false;
       generatePuzzle();
+    });
+
+    // === 快捷篩選與指定圖片勾選 ===
+    document.getElementById('sel-all-btn').addEventListener('click', () => {
+      state.selectedIds = getAllAvailableItems().map(i => i.id);
+      saveState();
+      renderAllItemsGrid();
+      updateStatsUI();
+    });
+
+    document.getElementById('sel-high-btn').addEventListener('click', () => {
+      state.selectedIds = BUILTIN_PUZZLE_ITEMS.filter(i => i.contrast === 'high').map(i => i.id);
+      saveState();
+      renderAllItemsGrid();
+      updateStatsUI();
+    });
+
+    document.getElementById('sel-natural-btn').addEventListener('click', () => {
+      state.selectedIds = BUILTIN_PUZZLE_ITEMS.filter(i => i.contrast === 'natural').map(i => i.id);
+      saveState();
+      renderAllItemsGrid();
+      updateStatsUI();
+    });
+
+    document.getElementById('sel-custom-btn').addEventListener('click', () => {
+      if (state.customItems.length === 0) {
+        alert('你還未加入自訂相片，請先按下方藍色或黃色按鈕上傳相片！');
+        return;
+      }
+      state.selectedIds = state.customItems.map(i => i.id);
+      saveState();
+      renderAllItemsGrid();
+      updateStatsUI();
+    });
+
+    document.getElementById('sel-clear-btn').addEventListener('click', () => {
+      state.selectedIds = [];
+      renderAllItemsGrid();
+      updateStatsUI();
     });
 
     // === 額外選配相片上傳與圖卡管理 ===
@@ -1875,11 +2017,13 @@
         }
       }
       pendingBatchItems.forEach((item, idx) => {
+        const newId = 'cpitem_' + Date.now() + '_' + idx;
         state.customItems.push({
-          id: 'cpitem_' + Date.now() + '_' + idx,
+          id: newId,
           name: item.name.trim(),
           imageUrl: item.imageUrl
         });
+        state.selectedIds.push(newId);
       });
       saveState();
       pendingBatchItems = [];
@@ -1894,29 +2038,55 @@
       grid.innerHTML = '';
 
       BUILTIN_PUZZLE_ITEMS.forEach(item => {
+        const isSelected = state.selectedIds.includes(item.id);
         const card = document.createElement('div');
-        card.className = 'manage-card' + (item.contrast === 'high' ? ' hc-card' : '');
+        card.className = 'manage-card' + (isSelected ? ' is-selected' : '');
         card.innerHTML = `
+          <div class="select-check-badge">${isSelected ? '✓' : ''}</div>
           <div class="thumb-box"><img src="${item.imageUrl}" /></div>
           <div class="card-title">${item.name}</div>
           <div class="card-tag">${item.contrast === 'high' ? '⚡ 高對比' : '🌿 自然日常'}</div>
         `;
+        card.addEventListener('click', () => {
+          if (state.selectedIds.includes(item.id)) {
+            state.selectedIds = state.selectedIds.filter(id => id !== item.id);
+          } else {
+            state.selectedIds.push(item.id);
+          }
+          saveState();
+          renderAllItemsGrid();
+          updateStatsUI();
+        });
         grid.appendChild(card);
       });
 
       state.customItems.forEach((item, idx) => {
+        const isSelected = state.selectedIds.includes(item.id);
         const card = document.createElement('div');
-        card.className = 'manage-card';
+        card.className = 'manage-card' + (isSelected ? ' is-selected' : '');
         card.innerHTML = `
+          <div class="select-check-badge">${isSelected ? '✓' : ''}</div>
           <button type="button" class="del-chip-btn">✕</button>
           <div class="thumb-box"><img src="${item.imageUrl}" /></div>
           <div class="card-title">${item.name}</div>
           <div class="card-tag">📷 自訂相片</div>
         `;
-        card.querySelector('.del-chip-btn').addEventListener('click', () => {
+        card.querySelector('.del-chip-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          state.selectedIds = state.selectedIds.filter(id => id !== item.id);
           state.customItems.splice(idx, 1);
           saveState();
           renderStartPreview();
+          renderAllItemsGrid();
+          updateStatsUI();
+        });
+        card.addEventListener('click', () => {
+          if (state.selectedIds.includes(item.id)) {
+            state.selectedIds = state.selectedIds.filter(id => id !== item.id);
+          } else {
+            state.selectedIds.push(item.id);
+          }
+          saveState();
           renderAllItemsGrid();
           updateStatsUI();
         });
@@ -1941,10 +2111,16 @@
     }
 
     function updateStatsUI() {
-      const cutNames = { lr2: '左右 2 塊', tb2: '上下 2 塊', grid4: '2×2 四塊', grid9: '3×3 九塊' };
+      const cutNames = {
+        single1: '拉 1 塊',
+        lr2: '左右 2 塊',
+        tb2: '上下 2 塊',
+        grid4: '2×2 四塊',
+        grid9: '3×3 九塊'
+      };
       document.getElementById('stat-total').textContent = state.stats.totalCompleted;
-      document.getElementById('stat-stage').textContent = cutNames[state.settings.currentCut] || '左右 2 塊';
-      document.getElementById('stat-photos').textContent = getActiveItemPool().length;
+      document.getElementById('stat-stage').textContent = cutNames[state.settings.currentCut] || '拉 1 塊';
+      document.getElementById('stat-photos').textContent = state.selectedIds.length;
     }
 
     document.querySelectorAll('.btn-group').forEach(group => {
@@ -1962,13 +2138,12 @@
           } else if (key === 'manualNext') {
             val = (val === 'true');
           } else if (key === 'cutMode') {
-            s.currentCut = (val === 'auto') ? 'lr2' : val;
+            s.currentCut = (val === 'auto') ? 'single1' : val;
             s.streakAtLevel = 0;
           }
           s[key] = val;
 
           applySettingsUI();
-          renderStartPreview();
           saveState();
           updateStatsUI();
         });
@@ -1979,7 +2154,7 @@
       state.stats.totalCompleted = 0;
       runtime.roundCompleted = 0;
       state.settings.streakAtLevel = 0;
-      if (state.settings.cutMode === 'auto') state.settings.currentCut = 'lr2';
+      if (state.settings.cutMode === 'auto') state.settings.currentCut = 'single1';
       saveState();
       updateHeaderUI();
       updateStatsUI();
@@ -1987,11 +2162,16 @@
 
     document.getElementById('close-panel-btn').addEventListener('click', () => {
       if (pendingBatchItems.length > 0) {
-        alert('請先按綠色的「✅ 確認加入以上相片」按鈕！');
+        alert('請先按綠色的「✅ 確認加入以上相片並勾選」按鈕！');
+        return;
+      }
+      if (state.selectedIds.length === 0) {
+        alert('請至少剔選 1 張圖片作為練習題目！');
         return;
       }
       teacherPanel.style.display = 'none';
       document.getElementById('start-overlay').style.display = 'none';
+      renderStartPreview();
       if (document.getElementById('break-overlay').style.display !== 'flex') {
         runtime.isPaused = false;
         generatePuzzle();
@@ -2010,6 +2190,9 @@
       loadCantoneseVoice();
       if ('speechSynthesis' in window) {
         window.speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+      }
+      if (state.selectedIds.length === 0) {
+        state.selectedIds = getAllAvailableItems().map(i => i.id);
       }
       document.getElementById('start-overlay').style.display = 'none';
       runtime.isPaused = false;
